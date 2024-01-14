@@ -1,0 +1,19 @@
+{
+  "name": "multicmd-runner",
+  "version": "0.0.1",
+  "description": "A CLI helper for run multiple commands at the same time.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Md Usman Ansari",
+  "license": "MIT",
+  "preferGlobal": true,
+  "bin": {
+    "multicmd-runner": "./src/index.js"
+  },
+  "dependencies": {
+    "chalk": "^4",
+    "commander": "^11.1.0"
+  }
+}

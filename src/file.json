@@ -1,0 +1,16 @@
+{
+  "dev": [
+    {
+      "title": "Dashboard Development Server",
+      "command": "pnpm dev",
+      "location": "/dashboard"
+    }
+  ],
+  "build": [
+    {
+      "title": "Dashboard Build",
+      "command": "pnpm build",
+      "location": "/dashboard"
+    }
+  ]
+}
