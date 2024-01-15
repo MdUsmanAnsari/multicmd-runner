@@ -42,6 +42,16 @@ Now in root directory there is created a file `multicmd-runner.config.json` Some
 }
 ```
 
+### Run the all the commands
+
+```bash
+$ multicmd-runner <your_key>
+
+// like:
+$ multicmd-runner dev
+$ multicmd-runner build
+```
+
 or you can create direclty array of commands objects.
 
 ```json
@@ -52,6 +62,12 @@ or you can create direclty array of commands objects.
     "location": "/dashboard"
   }
 ]
+```
+
+### Directly run the all the commands if you don't specifie key.
+
+```bash
+$ multicmd-runner
 ```
 
 Object must follows as this format 👇🏻
