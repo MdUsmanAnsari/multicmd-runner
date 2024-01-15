@@ -11,6 +11,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "nodejs",
+    "cli",
+    "tool",
+    "command line"
+  ],
   "author": "Md Usman Ansari",
   "license": "MIT",
   "preferGlobal": true,
