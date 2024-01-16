@@ -1,6 +1,6 @@
 # ✨ multicmd-runner
 
-### A CLI helper for run multiple commands at the same time.
+### A simple CLI helper for run multiple commands at the same time.
 
 ### 🚀 Quickstart
 
@@ -14,13 +14,13 @@ $ yarn global multicmd-runner
 $ npm i -g multicmd-runner
 ```
 
-`cd` into your root of project's directory, and try initialize the multicmd-runner
+Navigate to the root of your project directory and initialize multicmd-runner:
 
 ```bash
 $ multicmd-runner init
 ```
 
-Now in root directory there is created a file `multicmd-runner.config.json` Something look like this 👇🏻
+Now, a file named multicmd-runner.config.json is created in the root directory. It looks something like this 👇🏻 and you can customized as per your need.
 
 ```json
 {
@@ -42,7 +42,7 @@ Now in root directory there is created a file `multicmd-runner.config.json` Some
 }
 ```
 
-### Run the all the commands
+#### Run the commands
 
 ```bash
 $ multicmd-runner <your_key>
@@ -52,7 +52,7 @@ $ multicmd-runner dev
 $ multicmd-runner build
 ```
 
-or you can create direclty array of commands objects.
+Alternatively, you can directly create an array of command objects.
 
 ```json
 [
@@ -64,18 +64,20 @@ or you can create direclty array of commands objects.
 ]
 ```
 
-### Directly run the all the commands if you don't specifie key.
+You can also run an array of commands directly if you don't specify any key.
 
 ```bash
 $ multicmd-runner
 ```
 
-Object must follows as this format 👇🏻
+The command object must follow this format 👇🏻
 
 ```json
 {
   "title": "Your title",
-  "command": "Specify command",
+  "command": "Specify you command command",
   "location": "path where command is run."
 }
+
+// The title is an optional field. If not provided, the location will be taken by default.
 ```

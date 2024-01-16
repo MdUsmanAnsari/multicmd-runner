@@ -12,7 +12,7 @@ function createConfigFile() {
   }
 }
 
-function isNoCommandExists(data, type) {
+function getValidCommands(data, type) {
   if (!data && !type) {
     console.error(chalk.red("\n Error: Config is empty."));
     process.exit(0);
@@ -57,7 +57,7 @@ function readConfigFile(type) {
   try {
     const file = fs.readFileSync(CONFIG_FILENAME, "utf8");
     const jsonData = JSON.parse(file);
-    return isNoCommandExists(jsonData, type);
+    return getValidCommands(jsonData, type);
   } catch (error) {
     if (error.message === "Unexpected end of JSON input") {
       console.error(chalk.red("\n🐞 Error: Not a valid json file."));
