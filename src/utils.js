@@ -1,75 +1,104 @@
 const fs = require("fs");
 const chalk = require("chalk");
-const file = require("./file.json");
+const defaultConfig = require("./file.json");
 const CONFIG_FILENAME = "multicmd-runner.config.json";
 
 function createConfigFile() {
   if (fs.existsSync(CONFIG_FILENAME)) {
-    console.info(`\n✨ ${CONFIG_FILENAME} is already exits.\n`);
-  } else {
-    fs.writeFileSync(CONFIG_FILENAME, JSON.stringify(file), "utf8");
-    console.info(`\n🚀 ${CONFIG_FILENAME} is created.\n`);
+    console.info(`\n✨ ${CONFIG_FILENAME} already exists.\n`);
+    return;
   }
+
+  fs.writeFileSync(
+    CONFIG_FILENAME,
+    JSON.stringify(defaultConfig, null, 2),
+    "utf8"
+  );
+
+  console.info(`\n🚀 ${CONFIG_FILENAME} has been created successfully.\n`);
 }
 
-function getValidCommands(data, type) {
-  if (!data && !type) {
-    console.error(chalk.red("\n Error: Config is empty."));
-    process.exit(0);
-  } else if (!type && !Array.isArray(data)) {
+function getCommands(data, key) {
+  if (!data) {
+    console.error(chalk.red("\n❌ Error: Configuration is empty."));
+    process.exit(1);
+  }
+
+  if (!key && !Array.isArray(data)) {
     console.error(
       chalk.red(
-        "\n🐞 Error: If there is no specific key. JSON should be an array of commands."
+        "\n🐞 Error: The configuration must be an array of commands when no specific key is provided."
       )
     );
-    console.info(chalk.bold(`\nExample:`));
-    console.info(`[{
-     "title": "Dashboard Development Server",
-     "command": "pnpm dev",
-     "location": "/dashboard"
-}]
-    `);
-    process.exit(0);
-  } else if (type && Array.isArray(data)) {
-    console.error(
-      chalk.red("🐞 Error: JSON should be an array of commands.\n")
-    );
-    console.info(chalk.bold(`Example:`));
-    console.info(`{
-      "${type}": [
-        {
-          "title": "Dashboard Development Server",
-          "command": "pnpm dev",
-          "location": "/dashboard"
-        }
-      ]
-}
-    `);
-    process.exit(0);
-  } else if (Array.isArray(data) && data.length === 0) {
-    console.info("\n😅 No commands specified!.");
-    process.exit(0);
+    printExampleWithoutKey();
+    process.exit(1);
   }
-  return type ? data[type] : data;
+
+  if (key && Array.isArray(data)) {
+    console.error(
+      chalk.red(
+        "\n🐞 Error: The configuration should use a key when structured as an object."
+      )
+    );
+    printExampleWithKey(key);
+    process.exit(1);
+  }
+
+  if (Array.isArray(data) && data.length === 0) {
+    console.info("\n😅 No commands specified in the configuration.");
+    process.exit(1);
+  }
+
+  return key ? data[key] : data;
 }
 
-function readConfigFile(type) {
+function readConfigFile(key) {
   try {
-    const file = fs.readFileSync(CONFIG_FILENAME, "utf8");
-    const jsonData = JSON.parse(file);
-    return getValidCommands(jsonData, type);
+    const fileContent = fs.readFileSync(CONFIG_FILENAME, "utf8");
+    const jsonData = JSON.parse(fileContent);
+    return getCommands(jsonData, key);
   } catch (error) {
-    if (error.message === "Unexpected end of JSON input") {
-      console.error(chalk.red("\n🐞 Error: Not a valid json file."));
+    if (error.message.includes("Unexpected end of JSON input")) {
+      console.error(
+        chalk.red("\n🐞 Error: The configuration file contains invalid JSON.")
+      );
     } else {
       console.error(
         chalk.red(
-          "\n🐞 Error: 'multicmd-runner.config.json' file doesn't exist! Try 'multicmd-runner init' first.\n"
+          `\n🐞 Error: ${CONFIG_FILENAME} does not exist or is inaccessible. Try running 'multicmd-runner init' to create it.\n`
         )
       );
     }
-    process.exit(0);
+    process.exit(1);
   }
+}
+
+function printExampleWithoutKey() {
+  console.info(chalk.bold("\nExample of valid configuration (Array):"));
+  console.info(`[
+  {
+    "title": "Dashboard Development Server",
+    "command": "pnpm dev",
+    "location": "/dashboard"
+  }
+]
+`);
+}
+
+function printExampleWithKey(key) {
+  console.info(
+    chalk.bold("\nExample of valid configuration (Object with Key):")
+  );
+  console.info(`{
+  "${key}": [
+    {
+      "title": "Dashboard Development Server",
+      "command": "pnpm dev",
+      "location": "/dashboard"
+    }
+  ]
+}
+`);
 }
 
 module.exports = { createConfigFile, readConfigFile };

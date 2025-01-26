@@ -15,13 +15,16 @@
     "nodejs",
     "cli",
     "tool",
-    "command line"
+    "command line",
+    "multi cmd",
+    "multi cmd runner"
   ],
   "author": "Md Usman Ansari",
   "license": "MIT",
   "preferGlobal": true,
   "bin": {
-    "multicmd-runner": "./src/index.js"
+    "multicmd-runner": "./src/index.js",
+    "mcr": "./src/index.js"
   },
   "dependencies": {
     "chalk": "^4",

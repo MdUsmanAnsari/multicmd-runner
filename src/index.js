@@ -3,54 +3,52 @@ const { spawn } = require("child_process");
 const path = require("path");
 const chalk = require("chalk");
 const { createConfigFile, readConfigFile } = require("./utils");
-
 const { program } = require("commander");
-const argument = program.parse(process.argv).args;
+
+const arguments = program.parse(process.argv).args;
 
 function runCommands(commands) {
   for (const { command, location, title } of commands || []) {
     const resolvedPath = path.resolve(`.${location}`);
-    const terminal = spawn(command, {
+
+    const processInstance = spawn(command, {
       shell: true,
       cwd: resolvedPath,
     });
 
     const outputPrefix = title || location;
 
-    terminal.stdout.on("data", (data) => {
-      console.log(`[${outputPrefix}]: ${data}`);
+    processInstance.stdout.on("data", (data) => {
+      console.log(`[${outputPrefix}]: ${data.toString().trim()}`);
     });
 
-    terminal.stderr.on("data", (data) => {
-      console.error(`[${outputPrefix}]:  ${data}`);
-    });
-    terminal.on("close", (code) => {
-      console.log(`[${outputPrefix}]: process exited with code ${code} 🔥`);
+    processInstance.stderr.on("data", (data) => {
+      console.error(`[${outputPrefix}]: ${data.toString().trim()}`);
     });
 
-    terminal.on("error", () => {
+    processInstance.on("close", (code) => {
+      console.log(`[${outputPrefix}]: Process exited with code ${code} 🔥`);
+    });
+
+    processInstance.on("error", (error) => {
       console.error(
         chalk.red(
-          `Error: Might be location is incorrect! please check once.\n🔥 Should be start with '/' like: '/api' or '/dashboard'\n Your location: ${resolvedPath}`
+          `\n❌ Error: The location might be incorrect. Please check the path.`
         )
       );
-      process.exit(0);
+      console.error(
+        chalk.yellow(
+          `🔥 Hint: Location should start with '/' like '/api' or '/dashboard'.\nYour location: ${resolvedPath}\nError Details: ${error.message}`
+        )
+      );
+      process.exit(1);
     });
   }
 }
 
-const commands = {
-  init: () => {
-    createConfigFile();
-  },
-  runCommands: (type) => {
-    const cmds = readConfigFile(type);
-    runCommands(cmds);
-  },
-};
-
-if (argument.includes("init")) {
-  commands.init();
+if (arguments.includes("init")) {
+  createConfigFile();
 } else {
-  commands.runCommands(argument[0]);
+  const cmds = readConfigFile(arguments[0]);
+  runCommands(cmds);
 }
