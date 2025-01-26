@@ -8,16 +8,18 @@ Install via NPM:
 
 ```bash
 # Using Yarn:
-$ yarn global multicmd-runner
+yarn global multicmd-runner
 
 # or, using NPM
-$ npm i -g multicmd-runner
+npm i -g multicmd-runner
 ```
 
 Navigate to the root of your project directory and initialize multicmd-runner:
 
 ```bash
-$ multicmd-runner init
+mcr init
+or
+multicmd-runner init
 ```
 
 Now, a file named multicmd-runner.config.json is created in the root directory. It looks something like this 👇🏻 and you can customized as per your need.
@@ -45,11 +47,16 @@ Now, a file named multicmd-runner.config.json is created in the root directory. 
 #### Run the commands
 
 ```bash
-$ multicmd-runner <your_key>
+mcr <your_key>
+or
+multicmd-runner <your_key>
 
 // like:
-$ multicmd-runner dev
-$ multicmd-runner build
+mcr dev
+mcr build
+
+multicmd-runner dev
+multicmd-runner build
 ```
 
 Alternatively, you can directly create an array of command objects.
@@ -67,7 +74,9 @@ Alternatively, you can directly create an array of command objects.
 You can also run an array of commands directly if you don't specify any key.
 
 ```bash
-$ multicmd-runner
+mcr
+or
+multicmd-runner
 ```
 
 The command object must follow this format 👇🏻
